@@ -1093,6 +1093,25 @@ class TwitchClipsIE(TwitchBaseIE):
             'creator': 'EA',
             'uploader': 'stereotype_',
             'uploader_id': '43566419',
+            'vod_id': '72078016',
+            'vod_offset_seconds': 7694,
+        },
+    }, {
+        'url': 'https://clips.twitch.tv/SpineyCleverPidgeonSwiftRage',
+        'md5': '1daf87320506728073b80adcd34f5341',
+        'info_dict': {
+            'id': '455099327',
+            'display_id': 'SpineyCleverPidgeonSwiftRage',
+            'ext': 'mp4',
+            'title': 'Duck yoinks the mic',
+            'thumbnail': r're:^https?://.*\.jpg',
+            'timestamp': 1557660810,
+            'upload_date': '20190512',
+            'creator': 'DashDucks',
+            'uploader': 'Michael_I_Guess',
+            'uploader_id': '57406191',
+            'vod_id': None,
+            'vod_offset_seconds': None,
         },
     }, {
         # multiple formats
@@ -1160,6 +1179,10 @@ class TwitchClipsIE(TwitchBaseIE):
       sourceURL
     }
     viewCount
+    video {
+      id
+    }
+    videoOffsetSeconds
   }
 }''' % video_id}, 'Downloading clip GraphQL', fatal=False)  # noqa: UP031
 
@@ -1212,4 +1235,6 @@ class TwitchClipsIE(TwitchBaseIE):
             'creator': try_get(clip, lambda x: x['broadcaster']['displayName'], str),
             'uploader': try_get(clip, lambda x: x['curator']['displayName'], str),
             'uploader_id': try_get(clip, lambda x: x['curator']['id'], str),
+            'vod_id': try_get(clip, lambda x: x['video']['id'], str),
+            'vod_offset_seconds': clip.get("videoOffsetSeconds"),
         }
